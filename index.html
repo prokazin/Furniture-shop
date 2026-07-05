@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>МебельПро — мягкая мебель</title>
+    
+    <meta name="description" content="Интернет-магазин мягкой мебели. Диваны, кресла, пуфы, кровати. Доставка по всей России.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ===== ХЕДЕР ===== -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <a href="index.html">
+                        <span class="logo-icon">🛋️</span>
+                        <span class="logo-text">Мебель<span class="logo-highlight">Про</span></span>
+                    </a>
+                </div>
+                
+                <div class="header-search">
+                    <form id="searchForm" onsubmit="searchProducts(event)">
+                        <input type="text" placeholder="Поиск товаров..." id="searchInput">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="header-phone">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+78005553535">8 (800) 555-35-35</a>
+                    </div>
+                    <a href="cart.html" class="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </div>
+                
+                <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="catalog.html?category=sofas">Диваны</a></li>
+                    <li><a href="catalog.html?category=armchairs">Кресла</a></li>
+                    <li><a href="catalog.html?category=poufs">Пуфы</a></li>
+                    <li><a href="catalog.html?category=beds">Кровати</a></li>
+                    <li><a href="catalog.html">Все товары</a></li>
+                    <li><a href="admin.html" class="admin-link"><i class="fas fa-cog"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Мягкая мебель<br>для вашего дома</h1>
+                <p>Диваны, кресла, пуфы и кровати от производителя. Высокое качество, доступные цены.</p>
+                <div class="hero-buttons">
+                    <a href="catalog.html" class="btn btn-primary">Смотреть каталог</a>
+                    <a href="#advantages" class="btn btn-secondary">Узнать больше</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">моделей</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">10 лет</span>
+                        <span class="stat-label">на рынке</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">довольных</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="assets/images/hero-sofa.jpg" alt="Мягкая мебель" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ПРЕИМУЩЕСТВА ===== -->
+    <section class="advantages" id="advantages">
+        <div class="container">
+            <div class="section-header">
+                <h2>Почему выбирают нас</h2>
+                <p>Мы делаем качественную мебель, которая служит долгие годы</p>
+            </div>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="advantage-icon"><i class="fas fa-truck"></i></div>
+                    <h3>Бесплатная доставка</h3>
+                    <p>По всей России при заказе от 50 000 ₽</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon"><i class="fas fa-clock"></i></div>
+                    <h3>Быстрое производство</h3>
+                    <p>Изготовление от 5 до 14 дней</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon"><i class="fas fa-ruler-combined"></i></div>
+                    <h3>Любые размеры</h3>
+                    <p>Изготовим по вашим размерам</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon"><i class="fas fa-check-circle"></i></div>
+                    <h3>Гарантия качества</h3>
+                    <p>Гарантия на каркас — 5 лет</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ХИТЫ ПРОДАЖ ===== -->
+    <section class="hits">
+        <div class="container">
+            <div class="section-header">
+                <h2>🔥 Хиты продаж</h2>
+                <p>Самые популярные модели</p>
+            </div>
+            <div class="product-grid" id="hitsGrid">
+                <!-- Загружаются из JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== КАТЕГОРИИ ===== -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Категории</h2>
+                <p>Выберите тип мебели</p>
+            </div>
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Загружаются из JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ПОДПИСКА ===== -->
+    <section class="subscribe">
+        <div class="container">
+            <div class="subscribe-content">
+                <h2>Будьте в курсе</h2>
+                <p>Подпишитесь на рассылку и получайте информацию о новых коллекциях и скидках</p>
+                <form class="subscribe-form" id="subscribeForm" onsubmit="subscribeNewsletter(event)">
+                    <input type="email" placeholder="Ваш Email" required>
+                    <button type="submit" class="btn btn-primary">Подписаться</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>МебельПро</h3>
+                    <p>Качественная мягкая мебель от производителя. Работаем с 2015 года.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Каталог</h4>
+                    <ul>
+                        <li><a href="catalog.html?category=sofas">Диваны</a></li>
+                        <li><a href="catalog.html?category=armchairs">Кресла</a></li>
+                        <li><a href="catalog.html?category=poufs">Пуфы</a></li>
+                        <li><a href="catalog.html?category=beds">Кровати</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Гарантия</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 8 (800) 555-35-35</li>
+                        <li><i class="fas fa-envelope"></i> info@mebelpro.ru</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Мебельная, 1</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 МебельПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
