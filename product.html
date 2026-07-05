@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Товар — МебельПро</title>
+    <meta name="description" content="Карточка товара мягкой мебель. Характеристики, фото, размеры.">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== КАРТОЧКА ТОВАРА ===== */
+        .product-page {
+            padding: 30px 0 60px;
+        }
+        .product-page .breadcrumbs {
+            font-size: 14px;
+            color: var(--gray-dark);
+            margin-bottom: 20px;
+        }
+        .product-page .breadcrumbs a {
+            color: var(--accent);
+        }
+
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* ===== ГАЛЕРЕЯ ===== */
+        .product-gallery {
+            position: relative;
+        }
+        .product-gallery .main-image {
+            width: 100%;
+            height: 450px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--gray);
+            position: relative;
+        }
+        .product-gallery .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-gallery .main-image .hit-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #ff6b35;
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .product-gallery .thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .product-gallery .thumbnails img {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .product-gallery .thumbnails img:hover,
+        .product-gallery .thumbnails img.active {
+            border-color: var(--accent);
+        }
+
+        /* ===== ИНФОРМАЦИЯ О ТОВАРЕ ===== */
+        .product-info h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .product-info .rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .product-info .rating .stars {
+            color: #f5a623;
+            font-size: 16px;
+        }
+        .product-info .rating .reviews {
+            color: var(--gray-dark);
+            font-size: 14px;
+        }
+
+        .product-info .price-block {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .product-info .price-block .current {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .product-info .price-block .old {
+            font-size: 18px;
+            color: var(--gray-dark);
+            text-decoration: line-through;
+        }
+        .product-info .price-block .discount {
+            background: #ff6b35;
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .product-info .stock {
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .product-info .stock.in {
+            color: #34c759;
+        }
+        .product-info .stock.out {
+            color: #ff3b30;
+        }
+
+        .product-info .desc {
+            color: var(--gray-dark);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        /* ===== ХАРАКТЕРИСТИКИ ===== */
+        .product-info .specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+            background: var(--gray);
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+        .product-info .specs .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 0.5px solid rgba(0,0,0,0.04);
+        }
+        .product-info .specs .spec-item .label {
+            color: var(--gray-dark);
+            font-size: 14px;
+        }
+        .product-info .specs .spec-item .value {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* ===== ВЫБОР РАЗМЕРА ===== */
+        .product-info .size-selector {
+            margin-bottom: 16px;
+        }
+        .product-info .size-selector label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .product-info .size-selector .sizes {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .product-info .size-selector .sizes button {
+            padding: 8px 16px;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px;
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--primary);
+        }
+        .product-info .size-selector .sizes button:hover {
+            border-color: var(--accent);
+        }
+        .product-info .size-selector .sizes button.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        /* ===== ВЫБОР ЦВЕТА ===== */
+        .product-info .color-selector {
+            margin-bottom: 16px;
+        }
+        .product-info .color-selector label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .product-info .color-selector .colors {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .product-info .color-selector .colors button {
+            padding: 6px 14px;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px;
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--primary);
+        }
+        .product-info .color-selector .colors button:hover {
+            border-color: var(--accent);
+        }
+        .product-info .color-selector .colors button.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        /* ===== КНОПКИ ===== */
+        .product-info .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .product-info .actions .btn {
+            flex: 1;
+            min-width: 160px;
+            text-align: center;
+        }
+        .product-info .actions .btn-secondary {
+            flex: 0.5;
+        }
+
+        /* ===== ФОТО В ИНТЕРЬЕРЕ ===== */
+        .interior-section {
+            margin-top: 40px;
+        }
+        .interior-section h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .interior-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        .interior-grid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .interior-grid img:hover {
+            transform: scale(1.02);
+        }
+
+        /* ===== ЧЕРТЕЖИ ===== */
+        .drawings-section {
+            margin-top: 40px;
+        }
+        .drawings-section h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .drawings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .drawings-grid img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            border-radius: var(--radius);
+            background: var(--gray);
+            padding: 8px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .drawings-grid img:hover {
+            transform: scale(1.02);
+        }
+
+        /* ===== ПОХОЖИЕ ТОВАРЫ ===== */
+        .related-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 0.5px solid rgba(0,0,0,0.04);
+        }
+        .related-section h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .related-grid .product-card {
+            cursor: pointer;
+        }
+
+        /* ===== МОДАЛЬНОЕ ОКНО ДЛЯ ФОТО ===== */
+        .photo-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            justify-content: center;
+            align-items: center;
+        }
+        .photo-modal.active {
+            display: flex;
+        }
+        .photo-modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+        .photo-modal-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+        .photo-modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .photo-modal-close:hover {
+            opacity: 1;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 992px) {
+            .product-layout {
+                grid-template-columns: 1fr;
+            }
+            .product-gallery .main-image {
+                height: 350px;
+            }
+        }
+        @media (max-width: 640px) {
+            .product-gallery .main-image {
+                height: 280px;
+            }
+            .product-info .specs {
+                grid-template-columns: 1fr;
+            }
+            .product-info .actions .btn {
+                flex: 1 1 100%;
+            }
+            .product-info .actions .btn-secondary {
+                flex: 1 1 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .product-gallery .thumbnails img {
+                width: 60px;
+                height: 60px;
+            }
+            .product-info h1 {
+                font-size: 24px;
+            }
+            .product-info .price-block .current {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== ХЕДЕР ===== -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <a href="index.html">
+                        <span class="logo-icon">🛋️</span>
+                        <span class="logo-text">Мебель<span class="logo-highlight">Про</span></span>
+                    </a>
+                </div>
+                <div class="header-search">
+                    <form onsubmit="searchProducts(event)">
+                        <input type="text" placeholder="Поиск товаров..." id="searchInput">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+                <div class="header-actions">
+                    <div class="header-phone">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+78005553535">8 (800) 555-35-35</a>
+                    </div>
+                    <a href="cart.html" class="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </div>
+                <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="catalog.html?category=sofas">Диваны</a></li>
+                    <li><a href="catalog.html?category=armchairs">Кресла</a></li>
+                    <li><a href="catalog.html?category=poufs">Пуфы</a></li>
+                    <li><a href="catalog.html?category=beds">Кровати</a></li>
+                    <li><a href="catalog.html">Все товары</a></li>
+                    <li><a href="admin.html" class="admin-link"><i class="fas fa-cog"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== КАРТОЧКА ТОВАРА ===== -->
+    <section class="product-page">
+        <div class="container">
+            <div class="breadcrumbs">
+                <a href="index.html">Главная</a> /
+                <a href="catalog.html" id="breadCategory">Каталог</a> /
+                <span id="breadName">Товар</span>
+            </div>
+
+            <div class="product-layout" id="productLayout">
+                <!-- ===== ГАЛЕРЕЯ ===== -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="mainImage" src="" alt="">
+                        <span class="hit-badge" id="hitBadge" style="display:none;">🔥 Хит</span>
+                    </div>
+                    <div class="thumbnails" id="thumbnails"></div>
+                </div>
+
+                <!-- ===== ИНФОРМАЦИЯ ===== -->
+                <div class="product-info" id="productInfo">
+                    <h1 id="productName">Название товара</h1>
+                    <div class="rating">
+                        <span class="stars" id="productRating">★★★★★</span>
+                        <span class="reviews" id="productReviews">(0 отзывов)</span>
+                    </div>
+                    <div class="price-block">
+                        <span class="current" id="productPrice">0 ₽</span>
+                        <span class="old" id="productOldPrice"></span>
+                        <span class="discount" id="productDiscount" style="display:none;">-0%</span>
+                    </div>
+                    <div class="stock in" id="productStock">● В наличии</div>
+
+                    <p class="desc" id="productDesc">Описание товара</p>
+
+                    <div class="specs" id="productSpecs"></div>
+
+                    <div class="size-selector" id="sizeSelector">
+                        <label>Выберите размер:</label>
+                        <div class="sizes" id="sizesContainer"></div>
+                    </div>
+
+                    <div class="color-selector" id="colorSelector">
+                        <label>Выберите цвет:</label>
+                        <div class="colors" id="colorsContainer"></div>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" onclick="addToCartFromProduct()">🛒 Добавить в корзину</button>
+                        <button class="btn btn-secondary" onclick="history.back()">← Назад</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== ФОТО В ИНТЕРЬЕРЕ ===== -->
+            <div class="interior-section" id="interiorSection" style="display:none;">
+                <h3>📸 Фото в интерьере</h3>
+                <div class="interior-grid" id="interiorGrid"></div>
+            </div>
+
+            <!-- ===== ЧЕРТЕЖИ ===== -->
+            <div class="drawings-section" id="drawingsSection" style="display:none;">
+                <h3>📐 Чертежи с размерами</h3>
+                <div class="drawings-grid" id="drawingsGrid"></div>
+            </div>
+
+            <!-- ===== ПОХОЖИЕ ТОВАРЫ ===== -->
+            <div class="related-section" id="relatedSection">
+                <h3>🛋️ Похожие товары</h3>
+                <div class="related-grid" id="relatedGrid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ФОТО МОДАЛЬНОЕ ОКНО ===== -->
+    <div class="photo-modal" id="photoModal" onclick="closePhotoModal()">
+        <div class="photo-modal-content" onclick="event.stopPropagation()">
+            <button class="photo-modal-close" onclick="closePhotoModal()">✕</button>
+            <img id="photoModalImg" src="" alt="Фото">
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>МебельПро</h3>
+                    <p>Качественная мягкая мебель от производителя. Работаем с 2015 года.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Каталог</h4>
+                    <ul>
+                        <li><a href="catalog.html?category=sofas">Диваны</a></li>
+                        <li><a href="catalog.html?category=armchairs">Кресла</a></li>
+                        <li><a href="catalog.html?category=poufs">Пуфы</a></li>
+                        <li><a href="catalog.html?category=beds">Кровати</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Гарантия</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 8 (800) 555-35-35</li>
+                        <li><i class="fas fa-envelope"></i> info@mebelpro.ru</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Мебельная, 1</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 МебельПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    // ===== ЛОГИКА КАРТОЧКИ =====
+    var currentProduct = null;
+    var selectedSize = 0;
+    var selectedColor = 0;
+
+    function loadProduct() {
+        var params = new URLSearchParams(window.location.search);
+        var id = parseInt(params.get('id'));
+        if (!id) {
+            showToast('❌ Товар не найден');
+            return;
+        }
+
+        var products = loadData(STORAGE_KEYS.PRODUCTS, getDefaultProducts());
+        currentProduct = products.find(function(p) { return p.id === id; });
+        if (!currentProduct) {
+            showToast('❌ Товар не найден');
+            return;
+        }
+
+        renderProduct(currentProduct);
+        renderRelated(currentProduct);
+        updateCartCount();
+    }
+
+    function renderProduct(p) {
+        // Хлебные крошки
+        document.getElementById('breadName').textContent = p.name;
+        var catName = getCategoryName(p.category);
+        document.getElementById('breadCategory').textContent = catName || 'Каталог';
+        document.getElementById('breadCategory').href = 'catalog.html?category=' + p.category;
+
+        // Название
+        document.getElementById('productName').textContent = p.name;
+
+        // Рейтинг
+        var stars = '';
+        var fullStars = Math.floor(p.rating || 0);
+        for (var i = 0; i < 5; i++) {
+            stars += i < fullStars ? '★' : '☆';
+        }
+        document.getElementById('productRating').textContent = stars;
+        document.getElementById('productReviews').textContent = '(' + (p.reviews || 0) + ' отзывов)';
+
+        // Цена
+        document.getElementById('productPrice').textContent = p.price.toLocaleString() + ' ₽';
+        if (p.oldPrice && p.oldPrice > p.price) {
+            document.getElementById('productOldPrice').textContent = p.oldPrice.toLocaleString() + ' ₽';
+            var discount = Math.round((1 - p.price / p.oldPrice) * 100);
+            document.getElementById('productDiscount').textContent = '- ' + discount + '%';
+            document.getElementById('productDiscount').style.display = 'inline-block';
+        } else {
+            document.getElementById('productOldPrice').textContent = '';
+            document.getElementById('productDiscount').style.display = 'none';
+        }
+
+        // Наличие
+        var stockEl = document.getElementById('productStock');
+        if (p.inStock) {
+            stockEl.textContent = '● В наличии';
+            stockEl.className = 'stock in';
+        } else {
+            stockEl.textContent = '● Нет в наличии';
+            stockEl.className = 'stock out';
+        }
+
+        // Хит
+        var hitBadge = document.getElementById('hitBadge');
+        if (p.isHit) {
+            hitBadge.style.display = 'block';
+        } else {
+            hitBadge.style.display = 'none';
+        }
+
+        // Описание
+        document.getElementById('productDesc').textContent = p.description || 'Описание отсутствует';
+
+        // Характеристики
+        var specsContainer = document.getElementById('productSpecs');
+        var specs = p.specs || {};
+        var specKeys = Object.keys(specs);
+        if (specKeys.length > 0) {
+            var specHtml = '';
+            for (var i2 = 0; i2 < specKeys.length; i2++) {
+                var key = specKeys[i2];
+                specHtml += '<div class="spec-item"><span class="label">' + key + '</span><span class="value">' + specs[key] + '</span></div>';
+            }
+            specsContainer.innerHTML = specHtml;
+            specsContainer.style.display = 'grid';
+        } else {
+            specsContainer.style.display = 'none';
+        }
+
+        // Изображения
+        var images = p.images || [];
+        if (p.image && images.length === 0) {
+            images = [p.image];
+        }
+        if (images.length === 0) {
+            images = ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400'];
+        }
+
+        // Главное изображение
+        document.getElementById('mainImage').src = images[0] || p.image;
+
+        // Миниатюры
+        var thumbsContainer = document.getElementById('thumbnails');
+        thumbsContainer.innerHTML = '';
+        for (var i3 = 0; i3 < images.length; i3++) {
+            var thumb = document.createElement('img');
+            thumb.src = images[i3];
+            thumb.alt = p.name;
+            thumb.onclick = function(idx) {
+                return function() {
+                    document.getElementById('mainImage').src = images[idx];
+                    document.querySelectorAll('.thumbnails img').forEach(function(el, index) {
+                        el.classList.toggle('active', index === idx);
+                    });
+                };
+            }(i3);
+            if (i3 === 0) thumb.classList.add('active');
+            thumbsContainer.appendChild(thumb);
+        }
+
+        // Размеры
+        var sizesContainer = document.getElementById('sizesContainer');
+        var sizes = p.sizes || [{ label: 'Стандарт', price: p.price }];
+        sizesContainer.innerHTML = '';
+        for (var i4 = 0; i4 < sizes.length; i4++) {
+            var sizeBtn = document.createElement('button');
+            sizeBtn.textContent = sizes[i4].label + ' (' + sizes[i4].price.toLocaleString() + ' ₽)';
+            sizeBtn.onclick = function(idx) {
+                return function() {
+                    selectedSize = idx;
+                    document.querySelectorAll('.size-selector .sizes button').forEach(function(el, index) {
+                        el.classList.toggle('active', index === idx);
+                    });
+                    // Обновляем цену
+                    var size = sizes[idx];
+                    document.getElementById('productPrice').textContent = size.price.toLocaleString() + ' ₽';
+                    // Если есть старая цена, пересчитываем скидку
+                    if (p.oldPrice && p.oldPrice > size.price) {
+                        var discount = Math.round((1 - size.price / p.oldPrice) * 100);
+                        document.getElementById('productDiscount').textContent = '- ' + discount + '%';
+                        document.getElementById('productDiscount').style.display = 'inline-block';
+                    } else {
+                        document.getElementById('productDiscount').style.display = 'none';
+                    }
+                };
+            }(i4);
+            if (i4 === 0) sizeBtn.classList.add('active');
+            sizesContainer.appendChild(sizeBtn);
+        }
+
+        // Цвета
+        var colorsContainer = document.getElementById('colorsContainer');
+        var colors = p.colors || ['Стандарт'];
+        colorsContainer.innerHTML = '';
+        for (var i5 = 0; i5 < colors.length; i5++) {
+            var colorBtn = document.createElement('button');
+            colorBtn.textContent = colors[i5];
+            colorBtn.onclick = function(idx) {
+                return function() {
+                    selectedColor = idx;
+                    document.querySelectorAll('.color-selector .colors button').forEach(function(el, index) {
+                        el.classList.toggle('active', index === idx);
+                    });
+                };
+            }(i5);
+            if (i5 === 0) colorBtn.classList.add('active');
+            colorsContainer.appendChild(colorBtn);
+        }
+
+        // Фото в интерьере
+        var interiorSection = document.getElementById('interiorSection');
+        var interiorGrid = document.getElementById('interiorGrid');
+        var interiorPhotos = p.interiorPhotos || [];
+        if (interiorPhotos.length > 0) {
+            interiorSection.style.display = 'block';
+            interiorGrid.innerHTML = interiorPhotos.map(function(img) {
+                return '<img src="' + img + '" alt="Фото в интерьере" onclick="openPhotoModal(\'' + img + '\')">';
+            }).join('');
+        } else {
+            interiorSection.style.display = 'none';
+        }
+
+        // Чертежи
+        var drawingsSection = document.getElementById('drawingsSection');
+        var drawingsGrid = document.getElementById('drawingsGrid');
+        var drawings = p.drawings || [];
+        if (drawings.length > 0) {
+            drawingsSection.style.display = 'block';
+            drawingsGrid.innerHTML = drawings.map(function(img) {
+                return '<img src="' + img + '" alt="Чертёж" onclick="openPhotoModal(\'' + img + '\')">';
+            }).join('');
+        } else {
+            drawingsSection.style.display = 'none';
+        }
+    }
+
+    function getCategoryName(categoryId) {
+        var categories = loadData(STORAGE_KEYS.CATEGORIES, getDefaultCategories());
+        var cat = categories.find(function(c) { return c.id === categoryId; });
+        return cat ? cat.name : null;
+    }
+
+    function renderRelated(product) {
+        var products = loadData(STORAGE_KEYS.PRODUCTS, getDefaultProducts());
+        var related = products
+            .filter(function(p) { return p.id !== product.id && p.category === product.category; })
+            .slice(0, 4);
+        
+        var grid = document.getElementById('relatedGrid');
+        if (related.length === 0) {
+            grid.innerHTML = '<p style="color:var(--gray-dark);">Нет похожих товаров</p>';
+            return;
+        }
+
+        grid.innerHTML = related.map(function(p) {
+            return createProductCard(p);
+        }).join('');
+    }
+
+    // ===== КОРЗИНА =====
+    function addToCartFromProduct() {
+        if (!currentProduct) return;
+        var size = currentProduct.sizes ? currentProduct.sizes[selectedSize] : null;
+        var price = size ? size.price : currentProduct.price;
+        var name = currentProduct.name + (size ? ' (' + size.label + ')' : '');
+        
+        var existing = cart.find(function(item) { return item.id === currentProduct.id && item.size === selectedSize; });
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            cart.push({ id: currentProduct.id, qty: 1, price: price, size: selectedSize, name: name });
+        }
+        saveData(STORAGE_KEYS.CART, cart);
+        updateCartCount();
+        showToast('✅ ' + name + ' добавлен в корзину!');
+    }
+
+    // ===== ФОТО МОДАЛЬНОЕ ОКНО =====
+    function openPhotoModal(src) {
+        document.getElementById('photoModalImg').src = src;
+        document.getElementById('photoModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePhotoModal() {
+        document.getElementById('photoModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // ===== ЗАПУСК =====
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProduct();
+        // Запрашиваем разрешение на уведомления
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    });
+    </script>
+</body>
+</html>
