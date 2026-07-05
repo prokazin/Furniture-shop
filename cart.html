@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Корзина — МебельПро</title>
+    <meta name="description" content="Корзина товаров мягкой мебели.">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== КОРЗИНА ===== */
+        .cart-page {
+            padding: 30px 0 60px;
+        }
+        .cart-page h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        .cart-page .breadcrumbs {
+            font-size: 14px;
+            color: var(--gray-dark);
+            margin-bottom: 20px;
+        }
+        .cart-page .breadcrumbs a {
+            color: var(--accent);
+        }
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 30px;
+        }
+
+        /* ===== СПИСОК ТОВАРОВ ===== */
+        .cart-items {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .cart-item {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 0.5px solid rgba(0,0,0,0.04);
+            align-items: center;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item .item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--gray);
+        }
+        .cart-item .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cart-item .item-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .cart-item .item-info .item-spec {
+            font-size: 13px;
+            color: var(--gray-dark);
+        }
+        .cart-item .item-info .item-price {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .cart-item .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .cart-item .item-actions .qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-item .item-actions .qty button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.06);
+            background: var(--white);
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-item .item-actions .qty button:hover {
+            background: var(--gray);
+        }
+        .cart-item .item-actions .qty span {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .cart-item .item-actions .remove {
+            background: none;
+            border: none;
+            color: var(--gray-dark);
+            cursor: pointer;
+            font-size: 18px;
+            transition: var(--transition);
+        }
+        .cart-item .item-actions .remove:hover {
+            color: #ff3b30;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .cart-empty h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .cart-empty p {
+            color: var(--gray-dark);
+            margin-bottom: 16px;
+        }
+
+        /* ===== ИТОГО ===== */
+        .cart-summary {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            border: 1px solid rgba(0,0,0,0.04);
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+        .cart-summary h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .cart-summary .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            color: var(--gray-dark);
+        }
+        .cart-summary .summary-row.total {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            border-top: 1px solid rgba(0,0,0,0.04);
+            padding-top: 12px;
+            margin-top: 4px;
+        }
+        .cart-summary .btn {
+            width: 100%;
+            margin-top: 16px;
+            text-align: center;
+            padding: 14px;
+            font-size: 16px;
+        }
+        .cart-summary .btn-secondary {
+            margin-top: 8px;
+            background: var(--gray);
+            color: var(--primary);
+            border: none;
+        }
+        .cart-summary .btn-secondary:hover {
+            background: #e5e5e5;
+        }
+
+        /* ===== ФОРМА ЗАКАЗА ===== */
+        .checkout-form {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(0,0,0,0.04);
+        }
+        .checkout-form h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .checkout-form input,
+        .checkout-form textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            background: var(--gray);
+            color: var(--primary);
+            outline: none;
+            transition: var(--transition);
+            margin-bottom: 10px;
+        }
+        .checkout-form input:focus,
+        .checkout-form textarea:focus {
+            border-color: var(--accent);
+        }
+        .checkout-form textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 992px) {
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+            .cart-summary {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .cart-item {
+                grid-template-columns: 60px 1fr;
+                gap: 12px;
+            }
+            .cart-item .item-image {
+                width: 60px;
+                height: 60px;
+            }
+            .cart-item .item-actions {
+                grid-column: 1 / -1;
+                justify-content: flex-start;
+            }
+            .cart-item .item-info .item-price {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cart-page h1 {
+                font-size: 24px;
+            }
+            .cart-items {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== ХЕДЕР ===== -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <a href="index.html">
+                        <span class="logo-icon">🛋️</span>
+                        <span class="logo-text">Мебель<span class="logo-highlight">Про</span></span>
+                    </a>
+                </div>
+                <div class="header-search">
+                    <form onsubmit="searchProducts(event)">
+                        <input type="text" placeholder="Поиск товаров..." id="searchInput">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+                <div class="header-actions">
+                    <div class="header-phone">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+78005553535">8 (800) 555-35-35</a>
+                    </div>
+                    <a href="cart.html" class="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </div>
+                <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="catalog.html?category=sofas">Диваны</a></li>
+                    <li><a href="catalog.html?category=armchairs">Кресла</a></li>
+                    <li><a href="catalog.html?category=poufs">Пуфы</a></li>
+                    <li><a href="catalog.html?category=beds">Кровати</a></li>
+                    <li><a href="catalog.html">Все товары</a></li>
+                    <li><a href="admin.html" class="admin-link"><i class="fas fa-cog"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== КОРЗИНА ===== -->
+    <section class="cart-page">
+        <div class="container">
+            <div class="breadcrumbs">
+                <a href="index.html">Главная</a> / <span>Корзина</span>
+            </div>
+            <h1>🛒 Корзина</h1>
+
+            <div class="cart-layout">
+                <!-- ===== ТОВАРЫ ===== -->
+                <div class="cart-items" id="cartItems">
+                    <!-- Загружаются из JS -->
+                </div>
+
+                <!-- ===== ИТОГО ===== -->
+                <div class="cart-summary" id="cartSummary">
+                    <h3>Итого</h3>
+                    <div class="summary-row">
+                        <span>Товары (<span id="summaryCount">0</span>)</span>
+                        <span id="summarySubtotal">0 ₽</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Доставка</span>
+                        <span id="summaryDelivery">Бесплатно</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>К оплате</span>
+                        <span id="summaryTotal">0 ₽</span>
+                    </div>
+
+                    <div class="checkout-form" id="checkoutForm">
+                        <h4>📝 Оформить заказ</h4>
+                        <input type="text" id="orderName" placeholder="Ваше имя" required>
+                        <input type="text" id="orderPhone" placeholder="Телефон" required>
+                        <input type="email" id="orderEmail" placeholder="Email">
+                        <textarea id="orderComment" placeholder="Комментарий к заказу"></textarea>
+                        <button class="btn btn-primary" onclick="submitOrder()">📦 Оформить заказ</button>
+                        <button class="btn btn-secondary" onclick="clearCart()">🗑️ Очистить корзину</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>МебельПро</h3>
+                    <p>Качественная мягкая мебель от производителя. Работаем с 2015 года.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Каталог</h4>
+                    <ul>
+                        <li><a href="catalog.html?category=sofas">Диваны</a></li>
+                        <li><a href="catalog.html?category=armchairs">Кресла</a></li>
+                        <li><a href="catalog.html?category=poufs">Пуфы</a></li>
+                        <li><a href="catalog.html?category=beds">Кровати</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Гарантия</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 8 (800) 555-35-35</li>
+                        <li><i class="fas fa-envelope"></i> info@mebelpro.ru</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Мебельная, 1</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 МебельПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    // ===== ЛОГИКА КОРЗИНЫ =====
+    function renderCart() {
+        var container = document.getElementById('cartItems');
+        var cart = loadData(STORAGE_KEYS.CART, []);
+        var products = loadData(STORAGE_KEYS.PRODUCTS, getDefaultProducts());
+
+        if (cart.length === 0) {
+            container.innerHTML = `
+                <div class="cart-empty">
+                    <div style="font-size:64px;margin-bottom:16px;">🛒</div>
+                    <h3>Корзина пуста</h3>
+                    <p>Вы пока не добавили ни одного товара</p>
+                    <a href="catalog.html" class="btn btn-primary">Перейти в каталог</a>
+                </div>
+            `;
+            updateSummary(cart);
+            return;
+        }
+
+        var html = '';
+        var subtotal = 0;
+        for (var i = 0; i < cart.length; i++) {
+            var item = cart[i];
+            var product = products.find(function(p) { return p.id === item.id; });
+            if (!product) continue;
+
+            var total = item.price * item.qty;
+            subtotal += total;
+
+            var sizeLabel = item.size !== undefined && product.sizes && product.sizes[item.size] ? ' (' + product.sizes[item.size].label + ')' : '';
+
+            html += '<div class="cart-item" data-index="' + i + '">';
+            html += '<div class="item-image"><img src="' + (product.image || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400') + '" alt="' + product.name + '"></div>';
+            html += '<div class="item-info">';
+            html += '<h3>' + product.name + sizeLabel + '</h3>';
+            html += '<div class="item-spec">Артикул: ' + product.id + '</div>';
+            html += '<div class="item-price">' + total.toLocaleString() + ' ₽</div>';
+            html += '</div>';
+            html += '<div class="item-actions">';
+            html += '<div class="qty">';
+            html += '<button onclick="changeQty(' + i + ', -1)">−</button>';
+            html += '<span>' + item.qty + '</span>';
+            html += '<button onclick="changeQty(' + i + ', 1)">+</button>';
+            html += '</div>';
+            html += '<button class="remove" onclick="removeFromCart(' + i + ')"><i class="fas fa-trash"></i></button>';
+            html += '</div>';
+            html += '</div>';
+        }
+
+        container.innerHTML = html;
+        updateSummary(cart);
+        updateCartCount();
+    }
+
+    function updateSummary(cart) {
+        var count = cart.reduce(function(sum, item) { return sum + item.qty; }, 0);
+        var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
+
+        document.getElementById('summaryCount').textContent = count;
+        document.getElementById('summarySubtotal').textContent = total.toLocaleString() + ' ₽';
+        document.getElementById('summaryTotal').textContent = total.toLocaleString() + ' ₽';
+
+        // Доставка бесплатная при заказе от 50000
+        var deliveryEl = document.getElementById('summaryDelivery');
+        if (total >= 50000) {
+            deliveryEl.textContent = 'Бесплатно';
+        } else {
+            deliveryEl.textContent = '500 ₽';
+        }
+    }
+
+    function changeQty(index, delta) {
+        var cart = loadData(STORAGE_KEYS.CART, []);
+        if (!cart[index]) return;
+        cart[index].qty = Math.max(1, cart[index].qty + delta);
+        saveData(STORAGE_KEYS.CART, cart);
+        renderCart();
+    }
+
+    function removeFromCart(index) {
+        var cart = loadData(STORAGE_KEYS.CART, []);
+        cart.splice(index, 1);
+        saveData(STORAGE_KEYS.CART, cart);
+        renderCart();
+    }
+
+    function clearCart() {
+        if (!confirm('Очистить корзину?')) return;
+        saveData(STORAGE_KEYS.CART, []);
+        renderCart();
+    }
+
+    // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
+    function submitOrder() {
+        var name = document.getElementById('orderName').value.trim();
+        var phone = document.getElementById('orderPhone').value.trim();
+        var email = document.getElementById('orderEmail').value.trim();
+        var comment = document.getElementById('orderComment').value.trim();
+
+        if (!name || !phone) {
+            showToast('❌ Заполните имя и телефон!');
+            return;
+        }
+
+        var cart = loadData(STORAGE_KEYS.CART, []);
+        if (cart.length === 0) {
+            showToast('❌ Корзина пуста!');
+            return;
+        }
+
+        var products = loadData(STORAGE_KEYS.PRODUCTS, getDefaultProducts());
+        var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
+        var items = cart.map(function(item) {
+            var product = products.find(function(p) { return p.id === item.id; });
+            return (product ? product.name : 'Товар #' + item.id) + ' x' + item.qty;
+        }).join(', ');
+
+        // Сохраняем заказ
+        var orders = JSON.parse(localStorage.getItem(STORAGE_KEYS.ORDERS) || '[]');
+        orders.push({
+            id: Date.now(),
+            name: name,
+            phone: phone,
+            email: email,
+            comment: comment,
+            items: items,
+            total: total,
+            date: new Date().toLocaleString('ru-RU'),
+            status: 'Новый'
+        });
+        localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders));
+
+        // Сохраняем заявку в лиды (для CRM)
+        var leads = JSON.parse(localStorage.getItem(STORAGE_KEYS.LEADS) || '[]');
+        leads.push({
+            id: Date.now(),
+            name: name,
+            contact: phone,
+            message: 'Заказ: ' + items + '\nСумма: ' + total + ' ₽\nEmail: ' + email + '\nКомментарий: ' + comment,
+            date: new Date().toLocaleString('ru-RU'),
+            type: 'order'
+        });
+        localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(leads));
+
+        // Очищаем корзину
+        saveData(STORAGE_KEYS.CART, []);
+
+        showToast('✅ Заказ оформлен! Мы свяжемся с вами в ближайшее время.');
+        renderCart();
+    }
+
+    // ===== ЗАПУСК =====
+    document.addEventListener('DOMContentLoaded', function() {
+        renderCart();
+        updateCartCount();
+    });
+    </script>
+</body>
+</html>
